@@ -1,0 +1,10 @@
+# Apply attached udev rule
+# Get docker
+# Get docker-compose
+# Create volumes marked as external, copy in config as necessary
+# `docker-compose -d up`
+
+Misc
+----
+
+Docker's localhost is 172.17.0.1
