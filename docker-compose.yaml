@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+    mosquitto:
+      image: "eclipse-mosquitto"
+      restart: always
+      environment:
+        - TZ=America/Toronto
+      ports:
+        - 1883:1883
+      volumes:
+        - mosquittomqtt:/mosquitto/
+    node-red:
+      image: "nodered/node-red"
+      restart: always
+      environment:
+        - TZ=America/Toronto
+      ports:
+        - 1880:1880
+      volumes:
+        - nodered:/data
+    home-assistant:
+      image: "homeassistant/raspberrypi4-homeassistant:stable"
+      restart: always
+      init: true
+      environment:
+        - TZ=America/Toronto
+      network_mode: host
+      volumes:
+        - hass:/config
+#      devices:
+#        - "/dev/ttyXBee:/dev/ttyXBee"
+#    zigbee2mqtt:
+#      image: "koenkk/zigbee2mqtt"
+#      restart: always
+#      environment:
+#        - TZ=America/Toronto
+#      volumes:
+#        - zigbee2mqtt:/app/data
+#      devices:
+#        - "/dev/ttyCC2531:/dev/ttyCC2531"
+volumes:
+    mosquittomqtt:
+      external: true
+    nodered:
+      external: true
+    hass:
+      external: true
+    zigbee2mqtt:
+      external: true
