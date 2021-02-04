@@ -27,17 +27,18 @@ services:
       network_mode: host
       volumes:
         - hass:/config
-#      devices:
-#        - "/dev/ttyXBee:/dev/ttyXBee"
-#    zigbee2mqtt:
-#      image: "koenkk/zigbee2mqtt"
-#      restart: always
-#      environment:
-#        - TZ=America/Toronto
-#      volumes:
-#        - zigbee2mqtt:/app/data
-#      devices:
-#        - "/dev/ttyCC2531:/dev/ttyCC2531"
+        - ssh-keys:/ssh
+      devices:
+        - "/dev/ttyXBee:/dev/ttyXBee"
+    zigbee2mqtt:
+      image: "koenkk/zigbee2mqtt"
+      restart: always
+      environment:
+        - TZ=America/Toronto
+      volumes:
+        - zigbee2mqtt:/app/data
+      devices:
+        - "/dev/ttyCC2531:/dev/ttyCC2531"
 volumes:
     mosquittomqtt:
       external: true
@@ -46,4 +47,6 @@ volumes:
     hass:
       external: true
     zigbee2mqtt:
+      external: true
+    ssh-keys:
       external: true
