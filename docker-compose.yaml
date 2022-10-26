@@ -21,7 +21,6 @@ services:
     home-assistant:
       image: "homeassistant/raspberrypi4-homeassistant:stable"
       restart: always
-      init: true
       environment:
         - TZ=America/Toronto
       network_mode: host
