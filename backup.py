@@ -21,7 +21,6 @@ restore_parser.add_argument('-f', '--force', action='store_true')
 args = parser.parse_args()
 
 print(args)
-#  docker run --rm -v mosquittomqtt:/data -v $(pwd):/backup busybox tar cvf /backup/backup.tar /data/
 existing_volumes = get_existing_volumes()
 if args.command == 'backup':
     for volume in get_volume_names():
@@ -32,3 +31,4 @@ if args.command == 'backup':
         subprocess.check_call(['docker', 'run', '--rm', '-v', '{}:/data'.format(volume), '-v', '{}:/backup'.format(os.getcwd()), 'busybox', 'tar', 'cvf', '/backup/{}.tar'.format(volume), '/data/'])
 else:
     pass
+#subprocess.check_call(['docker', 'run', '--rm', '-v', '{}:/data'.format(volume), '-v', '{}:/backup'.format(os.getcwd()), 'busybox', 'tar', 'xvf', '/backup/{}.tar'.format(volume)'])
