@@ -20,7 +20,6 @@ restore_parser.add_argument('-f', '--force', action='store_true')
 
 args = parser.parse_args()
 
-print(args)
 existing_volumes = get_existing_volumes()
 if args.command == 'backup':
     for volume in get_volume_names():
@@ -30,5 +29,18 @@ if args.command == 'backup':
             continue
         subprocess.check_call(['docker', 'run', '--rm', '-v', '{}:/data'.format(volume), '-v', '{}:/backup'.format(os.getcwd()), 'busybox', 'tar', 'cvf', '/backup/{}.tar'.format(volume), '/data/'])
 else:
-    pass
-#subprocess.check_call(['docker', 'run', '--rm', '-v', '{}:/data'.format(volume), '-v', '{}:/backup'.format(os.getcwd()), 'busybox', 'tar', 'xvf', '/backup/{}.tar'.format(volume)'])
+    for volume in get_volume_names():
+        tar_filename = '{}.tar'.format(volume)
+        print(tar_filename)
+        if not os.path.exists(tar_filename):
+            print('{} does not exist - skipping.'.format(tar_filename))
+            continue
+        if volume in existing_volumes:
+            if not args.force:
+                print('Volume {} already exists - skipping.')
+                continue
+        else:
+            print('Creating volume {}'.format(volume))
+            subprocess.check_call(['docker', 'volume', 'create', '--name', volume])
+        print('Restoring up volume {}'.format(volume))
+        subprocess.check_call(['docker', 'run', '--rm', '-v', '{}:/data'.format(volume), '-v', '{}:/backup'.format(os.getcwd()), 'busybox', 'tar', 'xvf', '/backup/{}.tar'.format(volume)])
